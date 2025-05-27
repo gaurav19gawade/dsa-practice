@@ -4,17 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-class CourseSchedule {
-  /*
-  We have list of courses, where in order to complete a course we need to complete its pre-reqs
-  for eg - [[0,1]] to complete course 1 you need to complete course 0
-  Return whether courses can be completed or not
-   */
+public class CourseScheduleII {
 
-  public boolean canFinish(int numCourses, int[][] prerequisites){
+  List<Integer> path = new ArrayList<>();
+
+  public int[] findOrder(int numCourses, int[][] prerequisites) {
     HashMap<Integer, List<Integer>> map = new HashMap<>();
     boolean[] visited = new boolean[numCourses];
     boolean[] currentPath = new boolean[numCourses];
+
 
     for(int[] course: prerequisites){
       map.computeIfAbsent(course[1], key -> new ArrayList<>()).add(course[0]);
@@ -24,12 +22,12 @@ class CourseSchedule {
       if(!visited[i]){
         //traverse using dfs
         if(hasCycle(visited, currentPath, i, map)){
-          return false;
+          return new int[]{};
         }
       }
     }
 
-    return true;
+    return path.stream().mapToInt(Integer::intValue).toArray();
   }
 
   public boolean hasCycle(boolean[] visited, boolean[] currentPath, int currentCourse, HashMap<Integer, List<Integer>> map){
@@ -48,10 +46,12 @@ class CourseSchedule {
 
     currentPath[currentCourse] = false;
     visited[currentCourse] = true;
+    path.add(currentCourse);
     return false;
   }
 
   public static void main(String[] args){
+    CourseScheduleII cs = new CourseScheduleII();
     System.out.println("Print");
   }
 }
